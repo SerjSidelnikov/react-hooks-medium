@@ -21,8 +21,8 @@ export default (url) => {
       ...{
         headers: {
           authorization: token ? `Token ${token}` : '',
-        }
-      }
+        },
+      },
     };
 
     if (!isLoading) {

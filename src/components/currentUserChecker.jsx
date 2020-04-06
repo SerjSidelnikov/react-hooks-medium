@@ -39,11 +39,7 @@ const CurrentUserChecker = ({children}) => {
     }));
   }, [response, setCurrentUserState]);
 
-  return (
-    <>
-      {children}
-    </>
-  );
+  return <>{children}</>;
 };
 
 export default CurrentUserChecker;
