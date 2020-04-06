@@ -6,7 +6,7 @@ import useLocalStorage from 'hooks/useLocalStorage';
 
 const CurrentUserChecker = ({children}) => {
   const [{response}, doFetch] = useFetch('user');
-  const [currentUserState, setCurrentUserState] = useContext(CurrentUserContext);
+  const [, setCurrentUserState] = useContext(CurrentUserContext);
   const [token] = useLocalStorage('token');
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const CurrentUserChecker = ({children}) => {
       ...state,
       isLoading: true,
     }));
-  }, []);
+  }, [token, setCurrentUserState, doFetch]);
 
   useEffect(() => {
     if (!response) {
