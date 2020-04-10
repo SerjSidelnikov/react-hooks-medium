@@ -4,7 +4,7 @@ import {Link, useRouteMatch, Redirect} from 'react-router-dom';
 import useFetch from 'hooks/useFetch';
 import useLocalStorage from 'hooks/useLocalStorage';
 import {CurrentUserContext} from 'contexts/currentUser';
-import BackendErrorMessages from './components/backendErrorMessages';
+import BackendErrorMessages from 'components/backendErrorMessages';
 
 const Authentication = () => {
   const match = useRouteMatch();
@@ -20,7 +20,7 @@ const Authentication = () => {
   const [isSuccessfullSubmit, setIsSuccessfullSubmit] = useState(false);
   const [{isLoading, response, error}, doFetch] = useFetch(apiUrl);
   const [, setToken] = useLocalStorage('token');
-  const [, setCurrentUserState] = useContext(CurrentUserContext);
+  const [, dispatch] = useContext(CurrentUserContext);
 
   useEffect(() => {
     if (!response) {
@@ -29,13 +29,8 @@ const Authentication = () => {
 
     setToken(response.user.token);
     setIsSuccessfullSubmit(true);
-    setCurrentUserState((state) => ({
-      ...state,
-      isLoggedIn: true,
-      isLoading: false,
-      currentUser: response.user,
-    }));
-  }, [response, setToken, setCurrentUserState]);
+    dispatch({type: 'SET_AUTHORIZED', payload: response.user});
+  }, [response, setToken, dispatch]);
 
   if (isSuccessfullSubmit) {
     return <Redirect to="/"/>;
