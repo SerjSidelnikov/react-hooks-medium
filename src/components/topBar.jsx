@@ -49,7 +49,7 @@ const TopBar = () => {
               </li>
               <li className="nav-item">
                 <NavLink
-                  to={`/profiles${currentUserState.currentUser.username}`}
+                  to={`/profiles/${currentUserState.currentUser.username}`}
                   className="nav-link"
                 >
                   <img
