@@ -1,20 +1,49 @@
-import React, {useEffect} from 'react';
-import {useRouteMatch} from 'react-router-dom';
-import {Link} from 'react-router-dom';
+import React, {useEffect, useContext, useState} from 'react';
+import {useRouteMatch, Redirect, Link} from 'react-router-dom';
 
 import useFetch from 'hooks/useFetch';
 import Loading from 'components/loading';
 import ErrorMessage from 'components/errorMessage';
 import TagList from 'components/tagList';
+import {CurrentUserContext} from 'contexts/currentUser';
 
 const Article = () => {
   const {slug} = useRouteMatch().params;
   const apiUrl = `/articles/${slug}`;
   const [{response, isLoading, error}, doFetch] = useFetch(apiUrl);
+  const [{response: deleteResponse}, doDelete] = useFetch(apiUrl);
+  const [currentUserState] = useContext(CurrentUserContext);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
     doFetch();
   }, [doFetch]);
+
+  useEffect(() => {
+    if (!deleteResponse) {
+      return;
+    }
+
+    setIsSuccess(true);
+  }, [deleteResponse]);
+
+  const isAuthor = () => {
+    if (!response || !currentUserState.isLoggedIn) {
+      return false;
+    }
+
+    return response.article.author.username === currentUserState.currentUser.username;
+  };
+
+  const deleteArticle = () => {
+    doDelete({
+      method: 'delete',
+    });
+  };
+
+  if (isSuccess) {
+    return <Redirect to='/'/>;
+  }
 
   return (
     <div className="article-page">
@@ -32,6 +61,22 @@ const Article = () => {
                 </Link>
                 <span className="date">{response.article.createdAt}</span>
               </div>
+              {isAuthor() && (
+                <span>
+                  <Link
+                    to={`/articles/${response.article.slug}/edit`}
+                    className="btn btn-outline-secondary btn-sm"
+                  >
+                    <i className="ion-edit"/>
+                    Edit Article
+                  </Link>
+
+                  <button onClick={deleteArticle} className="btn btn-outline-danger btn-sm">
+                    <i className="ion-trash-a"/>
+                    Delete Article
+                  </button>
+                </span>
+              )}
             </div>
           </div>
         )}

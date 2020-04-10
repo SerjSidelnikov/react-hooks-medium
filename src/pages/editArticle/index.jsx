@@ -48,7 +48,7 @@ const EditArticle = () => {
     });
   };
 
-  if (!currentUserState.isLoggedIn) {
+  if (currentUserState.isLoggedIn === false) {
     return <Redirect to='/'/>;
   }
 

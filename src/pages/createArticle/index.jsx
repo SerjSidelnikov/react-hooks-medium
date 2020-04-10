@@ -26,7 +26,7 @@ const CreateArticle = () => {
     setIsSuccessfullSubmit(true);
   }, [response]);
 
-  if (!currentUserState.isLoggedIn) {
+  if (currentUserState.isLoggedIn === false) {
     return <Redirect to='/'/>;
   }
 
