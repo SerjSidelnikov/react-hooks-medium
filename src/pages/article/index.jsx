@@ -68,12 +68,12 @@ const Article = () => {
                     className="btn btn-outline-secondary btn-sm"
                   >
                     <i className="ion-edit"/>
-                    Edit Article
+                    &nbsp;Edit Article
                   </Link>
-
+                  {' '}
                   <button onClick={deleteArticle} className="btn btn-outline-danger btn-sm">
                     <i className="ion-trash-a"/>
-                    Delete Article
+                    &nbsp;Delete Article
                   </button>
                 </span>
               )}
